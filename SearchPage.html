@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">	
+		<title>Search page</title>
+		<!--  external link for rating stars  -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet"  href="css/search-page-style.css">
+		<script src="js/searchPage.js" defer></script>
+
+	</head>
+	<body>
+	  <!-- general container for grid layout -->
+	  <div class="container">
+	    <div class="header">
+			<div class="subheader">
+				 <img src="images/logo.png" alt="logo" width="200"; height="80">
+				  The Select Ones For You
+				<a href=""style="color:#254d74;font-size:18px;">Cart</a>
+				<a href="" style="color:green;font-size:18px;">Sign in</a>		
+			</div>
+			<div class="search">
+				<form id="searchForm" action="SearchPage.html" onsubmit="return false">
+					<input type="search" id="searchBar" name="search" placeholder="What are you looking for today?" style="width:300px;height:30px;border:1.5px solid #254d74;border-radius: 5px;color:#254d74;">
+					<input type="submit" value="Search" id="searchButton" style="color:#3399ff;font-weight:bold;font-size:16px;border-radius: 5px;border:1.5px solid #254d74;width:90px;height:30px;">
+				</form>
+			</div>
+			<div class="navi">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="Gaming Laptops">Gaming Laptops</a></li>
+					<li><a href="Home Laptops">Home Laptops</a></li>
+					<li><a href="Business Laptops">Business Laptops</a></li>
+					<li><a href="us">About Us</a></li>
+				</ul>
+			</div>
+	    </div>
+
+		<div class="filter">
+			<button class="filterButton">Brands</button>					
+					<input type="radio" class="radioButton" id="ASUS" name="radio" value="ASUS">
+					<label for="ASUS"> ASUS</label><br>
+					<input type="radio" class="radioButton" id="HP" name="radio" value="HP">
+					<label for="HP"> HP</label><br>
+					<input type="radio" class="radioButton" id="Lenovo" name="radio" value="Lenovo">
+					<label for="Lenovo"> Lenovo</label>							
+			<button class="filterButton">Prices</button>							
+					<input type="radio" class="radioButton" id="d500" name="radio" value="$1000">
+					<label for="$1000"> $0-$500</label><br>
+					<input type="radio" class="radioButton" id="d1000" name="radio" value="$2000">
+					<label for="$2000"> $500-$1000</label><br>
+					<input type="radio" class="radioButton" id="d2000" name="radio" value="$3000">
+					<label for="$3000">$1000-$2000</label>						
+			<button class="filterButton">Ratings</button>						
+					<input type="radio" class="radioButton" id="r3star" name="radio" value="3star">
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star"></span>
+					<span class="fa fa-star"></span><br>
+					<input type="radio" class="radioButton" id="r4star" name="radio" value="4star">
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star"></span><br>
+					<input type="radio" class="radioButton" id="r5star" name="radio" value="5star">
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>						
+		</div>
+		<div class="sort">
+			<form onsubmit="return false">
+				<label for="sortlaptops" style="font-weight:bold;color:#254d74;">Sort By:</label>
+				<select name="sortlaptops" id="sortlaptops" style="width:150px;height:24px;border:1.5px solid #254d74;border-radius: 5px;color:#254d74;">
+					<optgroup label="Sort by Price">
+						<option value="Lowp">Price Low to High</option>
+						<option value="Highp">Price High to Low</option>
+					</optgroup>
+					<optgroup label="Sort by Rating">
+						<option value="Lowr">Rating Low to High</option>
+						<option value="Highr">Rating High to Low</option>
+					</optgroup>
+				</select>
+				<input type="submit" value="Submit" id="sortSubmit">
+			</form>
+		</div>		
+		<div class="left">			
+		</div>
+		<div class="middle">			
+		</div>		
+		<div class="right">			
+		</div>					
+		<div class="footer">			
+		</div>
+	  </div>
+	</body>
+</html>
