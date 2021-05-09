@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">	
+		<title>Search page</title>
+		<!--  external link for rating stars  -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet"  href="css/search-page-style.css">
+	</head>
+	<body>
+	  <!-- general container for grid layout -->
+	  <div class="container">
+	    <div class="header">
+			<div class="subheader">
+				 <img src="images/logo.png" alt="logo" width="200"; height="80">
+				  The Select Ones For You
+				<a href=""style="color:#254d74;font-size:18px;">Cart</a>
+				<a href="" style="color:green;font-size:18px;">Sign in</a>		
+			</div>
+			<div class="search">
+				 <!-- let the function work and also need the return status of the function to stop refresh the whole page -->
+				<form onsubmit="return getResults()" >
+					<input type="text" id="searchBar" name="search" placeholder="What are you looking for today?" style="width:300px;height:30px;border:1.5px solid #254d74;border-radius: 5px;color:#254d74;" >
+					<input type="submit" value="Search" id="searchButton" style="color:#3399ff;font-weight:bold;font-size:16px;border-radius: 5px;border:1.5px solid #254d74;width:90px;height:30px;">
+				</form>		
+			
+				
+			</div>
+			<div class="navi">
+				<ul>
+					<li><a href="index.html">Home</a></li>
+					<li><a href="index.html">Gaming Laptops</a></li>
+					<li><a href="index.html">Home Laptops</a></li>
+					<li><a href="index.html">Business Laptops</a></li>
+					<li><a href="uploadProduct.html">Upload Images</a></li>
+				</ul>
+			</div>
+	    </div>
+
+		<div class="filter">
+			<button class="filterButton">Brands</button>					
+					<input type="radio" class="radioButton" id="ASUS" name="radio" value="ASUS">
+					<label for="ASUS"> ASUS</label><br>
+					<input type="radio" class="radioButton" id="HP" name="radio" value="HP">
+					<label for="HP"> HP</label><br>
+					<input type="radio" class="radioButton" id="Lenovo" name="radio" value="Lenovo">
+					<label for="Lenovo"> Lenovo</label>							
+			<button class="filterButton">Prices</button>							
+					<input type="radio" class="radioButton" id="d500" name="radio" value="$1000">
+					<label for="$1000"> $0-$500</label><br>
+					<input type="radio" class="radioButton" id="d1000" name="radio" value="$2000">
+					<label for="$2000"> $500-$1000</label><br>
+					<input type="radio" class="radioButton" id="d2000" name="radio" value="$3000">
+					<label for="$3000">$1000-$2000</label>						
+			<button class="filterButton">Ratings</button>						
+					<input type="radio" class="radioButton" id="r3star" name="radio" value="3star">
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star"></span>
+					<span class="fa fa-star"></span><br>
+					<input type="radio" class="radioButton" id="r4star" name="radio" value="4star">
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star"></span><br>
+					<input type="radio" class="radioButton" id="r5star" name="radio" value="5star">
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>
+					<span class="fa fa-star checked"></span>						
+		</div>
+		<div class="sort">
+			<form onsubmit="return false">
+				<label for="sortlaptops" style="font-weight:bold;color:#254d74;">Sort By:</label>
+				<select name="sortlaptops" id="sortlaptops" style="width:150px;height:24px;border:1.5px solid #254d74;border-radius: 5px;color:#254d74;">
+					<optgroup label="Sort by Price">
+						<option value="Lowp">Price Low to High</option>
+						<option value="Highp">Price High to Low</option>
+					</optgroup>
+					<optgroup label="Sort by Rating">
+						<option value="Lowr">Rating Low to High</option>
+						<option value="Highr">Rating High to Low</option>
+					</optgroup>
+				</select>
+				<input type="submit" value="Submit" id="sortSubmit">
+			</form>
+		</div>		
+		<div class="left">			
+		</div>
+		<div class="middle">			
+		</div>		
+		<div class="right">			
+		</div>					
+		<div class="footer">			
+		</div>
+	  </div>
+	  <script>
+		//define the search relevant variables
+var searchForm=document.querySelector("#searchForm");
+var searchBar=document.querySelector("#searchBar");
+var searchButton=document.querySelector("#searchButton");
+var userInput=searchBar.value;
+var leftContent=document.querySelector(".left");
+var middleContent=document.querySelector(".middle");
+var rightContent=document.querySelector(".right");
+var searchResults;
+
+//get user input from home page if applicable.
+userInput=sessionStorage.getItem("userInput");
+sessionStorage.clear();
+//display search results for input from index page. 
+window.onload=getResults();
+
+searchBar.addEventListener("input", function(){
+    userInput=this.value;
+});
+
+
+//use ajax to pass value to new.php and get the results back from php and use the results to reload part of the page.
+function getResults(){
+var data = new FormData();
+data.append('search', userInput);
+var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("POST", "search.php", true);
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        searchResults = JSON.parse(this.response);
+		var radios=document.querySelectorAll(".radioButton");
+		for(var i=0;i<radios.length;i++){
+        radios[i].checked=false;
+		}
+		displayResults()
+      }
+    } 
+	xmlhttp.send(data);
+	return false;
+}
+
+// filter functions for filter buttons
+function chkAf(product){   
+    return (product.brand=="asus");
+};
+function chkHf(product){   
+    return (product.brand=="hp");
+};
+function chkLf(product){   
+    return (product.brand=="lenovo");
+};
+function chk500f(product){   
+    return (product.price>=0 && product.price<=500);
+};
+function chk1000f(product){   
+    return (product.price>=501 && product.price<=1000);
+};
+function chk2000f(product){   
+    return (product.price>=1001 && product.price<=2000);
+};
+function chk3f(product){   
+    return (product.rating==3);
+};
+function chk4f(product){   
+    return (product.rating==4);
+};
+function chk5f(product){   
+    return (product.rating==5);
+};
+
+//filter button variables
+var chkAb=document.querySelector("#ASUS");
+var chkHb=document.querySelector("#HP");
+var chkLb=document.querySelector("#Lenovo");
+var chk500b=document.querySelector("#d500");
+var chk1000b=document.querySelector("#d1000");
+var chk2000b=document.querySelector("#d2000");
+var chk3b=document.querySelector("#r3star");
+var chk4b=document.querySelector("#r4star");
+var chk5b=document.querySelector("#r5star");
+
+//filter buttons eventlistners
+chkAb.addEventListener("click", function(){
+    if(this.checked){
+        var chkAs=searchResults.filter(chkAf);
+        displayCheckResults(chkAs);
+    }
+});
+chkHb.addEventListener("click", function(){
+    if(this.checked){
+        var chkHs=searchResults.filter(chkHf);
+        displayCheckResults(chkHs);
+    }
+});
+chkLb.addEventListener("click", function(){
+    if(this.checked){
+        var chkLs=searchResults.filter(chkLf);
+        displayCheckResults(chkLs);
+    }
+});
+chk500b.addEventListener("click", function(){
+    if(this.checked){
+        var chk500s=searchResults.filter(chk500f);
+        displayCheckResults(chk500s);
+    }
+});
+chk1000b.addEventListener("click", function(){
+    if(this.checked){
+        var chk1000s=searchResults.filter(chk1000f);
+        displayCheckResults(chk1000s);
+    }
+});
+chk2000b.addEventListener("click", function(){
+    if(this.checked){
+        var chk2000s=searchResults.filter(chk2000f);
+        displayCheckResults(chk2000s);
+    }
+});
+chk3b.addEventListener("click", function(){
+    if(this.checked){
+        var chk3s=searchResults.filter(chk3f);
+        displayCheckResults(chk3s);
+    }
+});
+chk4b.addEventListener("click", function(){
+    if(this.checked){
+        var chk4s=searchResults.filter(chk4f);
+        displayCheckResults(chk4s);
+    }
+});
+chk5b.addEventListener("click", function(){
+    if(this.checked){
+        var chk5s=searchResults.filter(chk5f);
+        displayCheckResults(chk5s);
+    }
+});
+
+
+//sort variables 
+var sortChoice=document.querySelector("#sortlaptops");
+var sortSubmit=document.querySelector("#sortSubmit");
+
+//sort button event listener
+sortSubmit.addEventListener("click", function(){
+    var sortOption=sortChoice.value;
+    if(sortOption=="Lowp"){
+        searchResults.sort(function(a, b){return a.price - b.price});
+        displayCheckResults(searchResults);
+    }
+    if(sortOption=="Highp"){
+        searchResults.sort(function(a, b){return b.price - a.price});
+        displayCheckResults(searchResults);
+    }
+    if(sortOption=="Lowr"){
+        searchResults.sort(function(a, b){return a.rating - b.rating});
+        displayCheckResults(searchResults);
+    }
+    if(sortOption=="Highr"){
+        searchResults.sort(function(a, b){return b.rating - a.rating});
+        displayCheckResults(searchResults);
+    }
+});
+
+
+
+//display search results in the grids, from left to right then goes to next line.
+function displayResults(){
+    leftContent.innerHTML="";
+    middleContent.innerHTML="";
+    rightContent.innerHTML="";
+	
+    
+
+    if(searchResults.length==0){
+        middleContent.innerHTML="Please try to enter laptop for all products; or brands like asus, hp, lenovo; or specifications like i7, i5, SSD; or screen size like 14 or 15.6.";
+        return;
+    }
+    for(var i=0;i<searchResults.length;i++){
+        if(i%3==0){
+            var link=document.createElement("a");
+            link.setAttribute("href",searchResults[i].page);
+            var image=document.createElement("img");
+            image.setAttribute("src",searchResults[i].spic);
+            image.setAttribute("width",300);
+            image.setAttribute("height",200);
+            image.setAttribute("alt","product");
+            link.appendChild(image);          
+            leftContent.appendChild(link);
+            var newline=document.createElement("br");
+            leftContent.appendChild(newline);
+            var name=document.createElement("p");
+            name.innerHTML=searchResults[i].name;
+            leftContent.appendChild(name);
+            var price=document.createElement("p");
+            price.innerHTML="$"+searchResults[i].price;
+            leftContent.appendChild(price);
+            var rating=document.createElement("span");
+            rating.innerHTML="User Rating: ";
+            leftContent.appendChild(rating);          
+            for(var j=1;j<=searchResults[i].rating;j++){
+                var starchk=document.createElement("span");
+                starchk.setAttribute("class","fa fa-star checked");
+                leftContent.appendChild(starchk);               
+            };
+            for(var k=1;k<=5-searchResults[i].rating;k++){
+                var starunchk=document.createElement("span");
+                starunchk.setAttribute("class","fa fa-star");
+                leftContent.appendChild(starunchk);
+            };
+            leftContent.appendChild(newline);
+            var button=document.createElement("button");
+            button.innerHTML="Add to Cart";
+            leftContent.appendChild(button);
+       }
+       if(i%3==1){
+            var link=document.createElement("a");
+            link.setAttribute("href",searchResults[i].page);
+            var image=document.createElement("img");
+            image.setAttribute("src",searchResults[i].spic);
+            image.setAttribute("width",300);
+            image.setAttribute("height",200);
+            image.setAttribute("alt","product");
+            link.appendChild(image);          
+            middleContent.appendChild(link);
+            var newline=document.createElement("br");
+            middleContent.appendChild(newline);
+            var name=document.createElement("p");
+            name.innerHTML=searchResults[i].name;
+            middleContent.appendChild(name);
+            var price=document.createElement("p");
+            price.innerHTML="$"+searchResults[i].price;
+            middleContent.appendChild(price);
+            var rating=document.createElement("span");
+            rating.innerHTML="User Rating: ";
+            middleContent.appendChild(rating);          
+            for(var j=1;j<=searchResults[i].rating;j++){
+                var starchk=document.createElement("span");
+                starchk.setAttribute("class","fa fa-star checked");
+                middleContent.appendChild(starchk);               
+            };
+            for(var k=1;k<=5-searchResults[i].rating;k++){
+                var starunchk=document.createElement("span");
+                starunchk.setAttribute("class","fa fa-star");
+                middleContent.appendChild(starunchk);
+            };
+            middleContent.appendChild(newline);
+            var button=document.createElement("button");
+            button.innerHTML="Add to Cart";
+            middleContent.appendChild(button);
+            middleContent.appendChild(newline);          
+   }
+      if(i%3==2){
+            var link=document.createElement("a");
+            link.setAttribute("href",searchResults[i].page);
+            var image=document.createElement("img");
+            image.setAttribute("src",searchResults[i].spic);
+            image.setAttribute("width",300);
+            image.setAttribute("height",200);
+            image.setAttribute("alt","product");
+            link.appendChild(image);          
+            rightContent.appendChild(link);
+            var newline=document.createElement("br");
+            rightContent.appendChild(newline);
+            var name=document.createElement("p");
+            name.innerHTML=searchResults[i].name;
+            rightContent.appendChild(name);
+            var price=document.createElement("p");
+            price.innerHTML="$"+searchResults[i].price;
+            rightContent.appendChild(price);
+            var rating=document.createElement("span");
+            rating.innerHTML="User Rating: ";
+            rightContent.appendChild(rating);          
+            for(var j=1;j<=searchResults[i].rating;j++){
+                var starchk=document.createElement("span");
+                starchk.setAttribute("class","fa fa-star checked");
+                rightContent.appendChild(starchk);               
+            };
+            for(var k=1;k<=5-searchResults[i].rating;k++){
+                var starunchk=document.createElement("span");
+                starunchk.setAttribute("class","fa fa-star");
+                rightContent.appendChild(starunchk);
+            };
+            rightContent.appendChild(newline);         
+            var button=document.createElement("button");
+            button.innerHTML="Add to Cart";
+            rightContent.appendChild(button);
+            rightContent.appendChild(newline);                  
+       }
+    }
+}
+
+
+//display search results from user input on search page
+
+
+//display filter results according to filter choice.
+//also this function could be used for sort results
+//if we only change the parameter to sorted result array.
+function displayCheckResults(checkResult){
+    leftContent.innerHTML="";
+    middleContent.innerHTML="";
+    rightContent.innerHTML="";
+    
+    for(var i=0;i<checkResult.length;i++){
+        if(i%3==0){
+            var link=document.createElement("a");
+            link.setAttribute("href",searchResults[i].page);
+            var image=document.createElement("img");
+            image.setAttribute("src",checkResult[i].spic);
+            image.setAttribute("width",300);
+            image.setAttribute("height",200);
+            image.setAttribute("alt","product");
+            link.appendChild(image);          
+            leftContent.appendChild(link);
+            var newline=document.createElement("br");
+            leftContent.appendChild(newline);
+            var name=document.createElement("p");
+            name.innerHTML=checkResult[i].name;
+            leftContent.appendChild(name);
+            var price=document.createElement("p");
+            price.innerHTML="$"+checkResult[i].price;
+            leftContent.appendChild(price);
+            var rating=document.createElement("span");
+            rating.innerHTML="User Rating: ";
+            leftContent.appendChild(rating);          
+            for(var j=1;j<=checkResult[i].rating;j++){
+                var starchk=document.createElement("span");
+                starchk.setAttribute("class","fa fa-star checked");
+                leftContent.appendChild(starchk);               
+            };
+            for(var k=1;k<=5-checkResult[i].rating;k++){
+                var starunchk=document.createElement("span");
+                starunchk.setAttribute("class","fa fa-star");
+                leftContent.appendChild(starunchk);
+            };
+            leftContent.appendChild(newline);
+            var button=document.createElement("button");
+            button.innerHTML="Add to Cart";
+            leftContent.appendChild(button);
+       }
+       if(i%3==1){
+            var link=document.createElement("a");
+            link.setAttribute("href",searchResults[i].page);
+            var image=document.createElement("img");
+            image.setAttribute("src",checkResult[i].spic);
+            image.setAttribute("width",300);
+            image.setAttribute("height",200);
+            image.setAttribute("alt","product");
+            link.appendChild(image);          
+            middleContent.appendChild(link);
+            var newline=document.createElement("br");
+            middleContent.appendChild(newline);
+            var name=document.createElement("p");
+            name.innerHTML=checkResult[i].name;
+            middleContent.appendChild(name);
+            var price=document.createElement("p");
+            price.innerHTML="$"+checkResult[i].price;
+            middleContent.appendChild(price);
+            var rating=document.createElement("span");
+            rating.innerHTML="User Rating: ";
+            middleContent.appendChild(rating);          
+            for(var j=1;j<=checkResult[i].rating;j++){
+                var starchk=document.createElement("span");
+                starchk.setAttribute("class","fa fa-star checked");
+                middleContent.appendChild(starchk);               
+            };
+            for(var k=1;k<=5-checkResult[i].rating;k++){
+                var starunchk=document.createElement("span");
+                starunchk.setAttribute("class","fa fa-star");
+                middleContent.appendChild(starunchk);
+            };
+            middleContent.appendChild(newline);
+            var button=document.createElement("button");
+            button.innerHTML="Add to Cart";
+            middleContent.appendChild(button);
+            middleContent.appendChild(newline);          
+   }
+      if(i%3==2){
+            var link=document.createElement("a");
+            link.setAttribute("href",searchResults[i].page);
+            var image=document.createElement("img");
+            image.setAttribute("src",checkResult[i].spic);
+            image.setAttribute("width",300);
+            image.setAttribute("height",200);
+            image.setAttribute("alt","product");
+            link.appendChild(image);          
+            rightContent.appendChild(link);
+            var newline=document.createElement("br");
+            rightContent.appendChild(newline);
+            var name=document.createElement("p");
+            name.innerHTML=checkResult[i].name;
+            rightContent.appendChild(name);
+            var price=document.createElement("p");
+            price.innerHTML="$"+checkResult[i].price;
+            rightContent.appendChild(price);
+            var rating=document.createElement("span");
+            rating.innerHTML="User Rating: ";
+            rightContent.appendChild(rating);          
+            for(var j=1;j<=checkResult[i].rating;j++){
+                var starchk=document.createElement("span");
+                starchk.setAttribute("class","fa fa-star checked");
+                rightContent.appendChild(starchk);               
+            };
+            for(var k=1;k<=5-checkResult[i].rating;k++){
+                var starunchk=document.createElement("span");
+                starunchk.setAttribute("class","fa fa-star");
+                rightContent.appendChild(starunchk);
+            };
+            rightContent.appendChild(newline);         
+            var button=document.createElement("button");
+            button.innerHTML="Add to Cart";
+            rightContent.appendChild(button);
+            rightContent.appendChild(newline);                  
+       }
+    }
+    
+}
+
+	  </script>
+	</body>
+</html>

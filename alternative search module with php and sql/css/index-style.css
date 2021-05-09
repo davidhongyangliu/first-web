@@ -1,0 +1,130 @@
+/* unify sizing */
+*{
+box-sizing: border-box;			
+}
+/* use grid layout */
+.container{
+	display: grid;
+	grid-template-columns: 16.67% 16.67% 16.67% 16.67% 16.67% 16.67%;
+	grid-gap:0px;
+	grid-template-areas:
+	'header header header header header header'
+	'subtitle subtitle subtitle subtitle subtitle subtitle'
+	'left left middle middle right right'
+	'footer footer footer footer footer footer';
+}
+.header{
+	grid-area:header;
+	position:fixed;
+	z-index:10;
+	top:0;
+	width:100%;
+	background-color:#f2f2f2;
+
+}
+.subheader{
+	font-style: oblique;
+	font-size: 15px;
+	font-weight: bold;
+	color: #990099;
+}
+.subheader a{
+	float: right;
+	padding:0px 40px;
+	padding-top:40px;
+	font-size:15px;
+	text-decoration: none;
+}
+.search{	
+	text-align:center;
+	margin-top:10px;
+	margin-bottom:10px;
+}				
+.navi ul{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #1f4060;
+	font-weight:bold;
+	font-size:15px;				
+}
+.navi li{
+	display: inline-block;			
+	padding-right:3%;
+	padding-left: 4%;
+}
+.navi a{
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+.navi a:hover{
+	background-color: #111;
+}
+.subtitle{
+	margin-top:185px;				
+	grid-area: subtitle;
+	font-weight:bold;
+	font-style: italic;
+	font-size:20px;
+	color:#1039f2;
+}
+.left,.middle,.right{
+	padding: 15px 65px;
+	text-align: center;				
+}
+.short-info{
+text-align:justify;
+}			
+button{
+	border: none;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 10px;
+	margin: 4px 2px;
+	cursor: pointer;
+	background-color: #008CBA;
+}
+.left{
+	grid-area: left;
+}
+.middle{
+	grid-area: middle;
+}
+.right{
+	grid-area: right;
+}
+.checked {
+	color: orange;
+}			
+.footer{
+	background-color: green;
+	grid-area: footer;
+	font-size:5px;
+	font-style:italic;
+	color:white;
+	margin-top:50px;
+}
+/* screen size responsive,using 1050px because
+of relatively larger picture size.*/
+@media (max-width: 1050px) {
+	.container  {
+	grid-template-areas: 
+	'header header header header header header' 
+	'left left left left left left' 
+	'middle middle middle middle middle middle' 
+	'right right right right right right' 
+	'footer footer footer footer footer footer';
+	}
+	.header .navi,.header .subheader a, .subtitle{
+	display:none;
+	}
+	.left{
+	margin-top:150px;
+	}			
+}			
