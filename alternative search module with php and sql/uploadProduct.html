@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab 8 - PHP 2</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery-3.4.1.slim.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col">
+                <h1 class="jumbotron text-center">upload new product image in this page</h1>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-light mb-3 float-right" data-toggle="modal" data-target="#uploadModal">Upload</button>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Upload</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="file" accept="image/*" id="imageFile">
+                        <p id="uploadError"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="uploadFile()">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<script>
+	//ajax to send file for php to process it and send feedback to indicate if upload is successful.
+	function uploadFile() {
+    var form = new FormData();
+    form.append('file', document.querySelector('#imageFile').files[0]);
+    form.append('upload', true);
+
+    var upload = new XMLHttpRequest();
+    upload.open('POST', 'upload.php');
+    upload.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200) {
+            if(this.responseText == 1) {
+                document.querySelector('#uploadError').innerText = "Image uploaded successfully.";
+                setTimeout(window.location.reload(), 50);
+            } else {
+                document.querySelector('#uploadError').innerText = "An error occoured when uploading the image";
+            }
+        }
+    };
+    upload.send(form);
+	}
+	</script>
+</body>
+</html>
